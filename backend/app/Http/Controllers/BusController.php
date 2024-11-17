@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\TrackingLocation;
 use App\Models\Bus;
 use Illuminate\Http\Request;
 
@@ -15,12 +16,12 @@ class BusController extends Controller
 
     function UpdateBuses(Request $request, $id)
     {
-
         $bus = Bus::find($id);
         if ($bus) {
             $bus->latitude = $request->latitude;
             $bus->longitude = $request->longitude;
             $bus->save();
+            broadcast(new TrackingLocation("tracking"));
             return response()->json(['data' => "Update Success"], 201);
         } else {
             return response()->json(['data' => "Not Found"], 404);

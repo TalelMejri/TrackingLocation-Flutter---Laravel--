@@ -4,16 +4,19 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
+import 'package:track_test/global/pusher_config.dart';
 import 'dart:convert';
+import 'package:track_test/model/BusModel.dart';
 
-class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
+class TrackBus extends StatefulWidget {
+  const TrackBus({super.key, required this.bus});
+  final BusModel bus;
 
   @override
-  _MapScreenState createState() => _MapScreenState();
+  _TrackBusState createState() => _TrackBusState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _TrackBusState extends State<TrackBus> {
   double? totalDistance;
   double? totalDuration;
   final MapController mapController = MapController();
@@ -22,6 +25,8 @@ class _MapScreenState extends State<MapScreen> {
   List<Marker> markers = [];
   double _currentZoom = 13.0;
   Timer? _markerUpdateTimer;
+  double lat = 0.0;
+  double long = 0.0;
 
   final String orsApiKey =
       '5b3ce3597851110001cf6248ed49d5d5d50b47c886fa2a8261919d5d';
@@ -32,13 +37,14 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
+  late PusherConfig _pusherConfig = PusherConfig();
+
   void _updateRedMarkerPosition() {
     if (currentLocation != null) {
       setState(() {
         final LatLng lastPosition = markers.last.point;
-        print(lastPosition);
         final newLatLng = LatLng(
-            lastPosition.latitude + 0.001, lastPosition.longitude + 0.001);
+            lastPosition.latitude - 0.001, lastPosition.longitude - 0.001);
         markers.removeLast();
         markers.add(
           Marker(
@@ -55,16 +61,24 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   @override
-  void dispose() {
-    _markerUpdateTimer?.cancel();
-    super.dispose();
+  void initState() {
+    super.initState();
+    _pusherConfig.initPusher(
+      (p0) {
+        print("test");
+      },
+    );
+    setState(() {
+      long = widget.bus.longitude;
+      lat = widget.bus.latitude;
+    });
+    _getCurrentLocation();
+    _startMarkerUpdateTimer();
   }
 
   @override
-  void initState() {
-    super.initState();
-    _getCurrentLocation();
-    _startMarkerUpdateTimer();
+  void dispose() {
+    super.dispose();
   }
 
   Future<void> _getCurrentLocation() async {
@@ -86,14 +100,12 @@ class _MapScreenState extends State<MapScreen> {
           Marker(
             width: 80.0,
             height: 80.0,
-            point: LatLng((userLocation.latitude)! + 0.0002,
-                userLocation.longitude! + 0.0002),
+            point: LatLng(lat, long),
             child: const Icon(Icons.bus_alert_rounded,
                 color: Colors.red, size: 40.0),
           ),
         );
-        _getRoute(LatLng((userLocation.latitude)! + 0.0002,
-            (userLocation.longitude!) + 0.0002));
+        _getRoute(LatLng(lat, long));
       });
     } on Exception {
       currentLocation = null;
@@ -122,8 +134,8 @@ class _MapScreenState extends State<MapScreen> {
         routePoints =
             coords.map((coord) => LatLng(coord[1], coord[0])).toList();
         final props = data['features'][0]['properties']['segments'][0];
-        totalDistance = props['distance'] / 1000; // Convertir en km
-        totalDuration = props['duration'] / 60; // Convertir en minutes
+        totalDistance = props['distance'] / 1000;
+        totalDuration = props['duration'] / 60;
         markers.removeLast();
         markers.add(
           Marker(
@@ -139,11 +151,6 @@ class _MapScreenState extends State<MapScreen> {
       print('Failed to fetch route');
     }
   }
-
-  // void _addDestinationMarker(LatLng point) {
-  //   setState(() {});
-  //   _getRoute(point);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +238,7 @@ class _MapScreenState extends State<MapScreen> {
                               );
                             });
                           },
-                          child: Icon(Icons.zoom_in),
+                          child: const Icon(Icons.zoom_in),
                         ),
                         const SizedBox(
                           height: 12,
@@ -247,7 +254,7 @@ class _MapScreenState extends State<MapScreen> {
                               );
                             });
                           },
-                          child: Icon(Icons.zoom_out),
+                          child: const Icon(Icons.zoom_out),
                         ),
                       ],
                     ))

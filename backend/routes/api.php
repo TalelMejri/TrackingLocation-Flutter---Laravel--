@@ -20,3 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/getBuses', [BusController::class, 'getBus']);
+Route::put('/update/{id}', [BusController::class, 'UpdateBuses']);
+

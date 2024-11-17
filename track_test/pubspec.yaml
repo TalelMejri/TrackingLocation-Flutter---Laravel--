@@ -39,6 +39,15 @@ dependencies:
   web_socket_channel: ^2.4.0
   geolocator: ^11.1.0
   location: ^5.0.3
+  pusher_channels_flutter: ^2.0.0
+  laravel_echo:
+    git:
+      url: https://github.com/kakajansh/echo.git
+      ref: master
+  pusher_client:
+    git:
+      url: https://github.com/DumbDev168/pusher_client.git
+      ref: master
 
 dev_dependencies:
   flutter_test:

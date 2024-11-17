@@ -16,17 +16,23 @@ class TrackingLocation implements ShouldBroadcastNow
     use SerializesModels;
 
     private $notif;
-
     public function __construct($notif)
     {
         $this->notif = $notif;
     }
 
+    public function broadcastAs(): string
+    {
+        return 'tracking.sent';
+    }
     public function broadcastWith()
     {
-        return ['message' => $this->notif];
+        return [
+            'event' => 'tracking',
+            'channel' => 'public',
+            'data' => ['message' => $this->notif],
+        ];
     }
-
     public function broadcastOn()
     {
         return new Channel('public');

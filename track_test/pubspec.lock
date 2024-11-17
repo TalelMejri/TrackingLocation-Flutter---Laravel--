@@ -176,6 +176,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.7"
+  laravel_echo:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: master
+      resolved-ref: "80c5b94e5de575220b038de21387d6bcb47feb3c"
+      url: "https://github.com/kakajansh/echo.git"
+    source: git
+    version: "1.0.0-beta.1"
   latlong2:
     dependency: "direct main"
     description:
@@ -296,6 +305,23 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  pusher_channels_flutter:
+    dependency: "direct main"
+    description:
+      name: pusher_channels_flutter
+      sha256: a678f20dfcd3b023a6ba37f4a77e2f7b0a0bb88bf0623593b2c5837dfa8ac36e
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.1"
+  pusher_client:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: master
+      resolved-ref: "81870488665b2c4dbc35e50554c07d5d9b0a7cdb"
+      url: "https://github.com/DumbDev168/pusher_client.git"
+    source: git
+    version: "2.0.0"
   sky_engine:
     dependency: transitive
     description: flutter

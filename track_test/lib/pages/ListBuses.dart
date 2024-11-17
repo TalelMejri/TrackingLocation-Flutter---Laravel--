@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:track_test/model/BusModel.dart';
+import 'package:track_test/pages/TrackBuses.dart';
 import 'package:track_test/services/BusServices.dart';
 
 class ListBuses extends StatefulWidget {
@@ -31,7 +32,14 @@ class _ListBusesState extends State<ListBuses> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Buses")),
+        appBar: AppBar(
+            title: const Center(
+                child: Text(
+              "Buses",
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            )),
+            backgroundColor: Colors.blueAccent),
         body: Container(
           margin: const EdgeInsets.only(top: 1, left: 1, right: 1),
           decoration: BoxDecoration(
@@ -45,8 +53,8 @@ class _ListBusesState extends State<ListBuses> {
               end: Alignment.bottomRight,
             ),
           ),
-          child: !loading
-              ? Center(
+          child: loading
+              ? const Center(
                   child: CircularProgressIndicator(color: Colors.blue),
                 )
               : buses.isEmpty
@@ -105,7 +113,7 @@ class _ListBusesState extends State<ListBuses> {
                               buses.removeAt(index);
                             });
                             ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("Delete")));
+                                const SnackBar(content: Text("Delete")));
                           },
                           child: Card(
                             elevation: 4,
@@ -115,6 +123,19 @@ class _ListBusesState extends State<ListBuses> {
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: ListTile(
+                              trailing: ElevatedButton.icon(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                TrackBus(bus: _busmodel)));
+                                  },
+                                  icon: const Icon(
+                                    Icons.check,
+                                    color: Colors.green,
+                                  ),
+                                  label: const Text("Check")),
                               title: Text(
                                 "${_busmodel.name}",
                                 style: const TextStyle(
