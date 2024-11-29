@@ -4,13 +4,13 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
-import 'package:track_test/global/pusher_config.dart';
 import 'dart:convert';
-import 'package:track_test/model/BusModel.dart';
+import 'package:track_test/model/BikeModel.dart';
+import 'package:track_test/services/BusServices.dart';
 
 class TrackBus extends StatefulWidget {
   const TrackBus({super.key, required this.bus});
-  final BusModel bus;
+  final BikeModel bus;
 
   @override
   _TrackBusState createState() => _TrackBusState();
@@ -30,14 +30,22 @@ class _TrackBusState extends State<TrackBus> {
 
   final String orsApiKey =
       '5b3ce3597851110001cf6248ed49d5d5d50b47c886fa2a8261919d5d';
+  final BusService _busService = BusService();
 
   void _startMarkerUpdateTimer() {
-    _markerUpdateTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      _updateRedMarkerPosition();
+    _markerUpdateTimer =
+        Timer.periodic(const Duration(seconds: 3), (timer) async {
+      final busmodel = await _busService.getBikeById(widget.bus.id);
+      if (busmodel != null) {
+        setState(() {
+          widget.bus.longitude = busmodel.longitude;
+          widget.bus.latitude = busmodel.latitude;
+        });
+      }
     });
   }
 
-  late PusherConfig _pusherConfig = PusherConfig();
+  //late PusherConfig _pusherConfig = PusherConfig();
 
   void _updateRedMarkerPosition() {
     if (currentLocation != null) {
@@ -51,7 +59,7 @@ class _TrackBusState extends State<TrackBus> {
             width: 80.0,
             height: 80.0,
             point: newLatLng,
-            child: const Icon(Icons.bus_alert_rounded,
+            child: const Icon(Icons.pedal_bike_sharp,
                 color: Colors.red, size: 40.0),
           ),
         );
@@ -63,11 +71,11 @@ class _TrackBusState extends State<TrackBus> {
   @override
   void initState() {
     super.initState();
-    _pusherConfig.initPusher(
-      (p0) {
-        print("test");
-      },
-    );
+    // _pusherConfig.initPusher(
+    //   (p0) {
+    //     print("test");
+    //   },
+    // );
     setState(() {
       long = widget.bus.longitude;
       lat = widget.bus.latitude;
@@ -101,7 +109,7 @@ class _TrackBusState extends State<TrackBus> {
             width: 80.0,
             height: 80.0,
             point: LatLng(lat, long),
-            child: const Icon(Icons.bus_alert_rounded,
+            child: const Icon(Icons.pedal_bike_sharp,
                 color: Colors.red, size: 40.0),
           ),
         );
@@ -142,7 +150,7 @@ class _TrackBusState extends State<TrackBus> {
             width: 80.0,
             height: 80.0,
             point: destination,
-            child: const Icon(Icons.bus_alert_rounded,
+            child: const Icon(Icons.pedal_bike_sharp,
                 color: Colors.red, size: 40.0),
           ),
         );
@@ -156,7 +164,7 @@ class _TrackBusState extends State<TrackBus> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chochen Tracking'),
+        title: const Text('Bike Tracking'),
       ),
       body: currentLocation == null
           ? const Center(child: CircularProgressIndicator())

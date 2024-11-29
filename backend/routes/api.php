@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\BusController;
+use App\Http\Controllers\BikeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +19,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/getBuses', [BusController::class, 'getBus']);
-Route::put('/update/{id}', [BusController::class, 'UpdateBuses']);
-
+Route::get('/getBikes', [BikeController::class, 'getBikes']);
+Route::put('/update/{id}', [BikeController::class, 'UpdateBikes']);
+Route::get('/getBikeById/{id}', [BikeController::class, 'getBikeById']);
+Route::delete('/DeleteBike/{id}', [BikeController::class, 'DeleteBike']);
+Route::put('/UpdateReserved/{id}', [BikeController::class, 'UpdateReserved']);
+Route::get('/GetBikesByNbrLocation', [BikeController::class, 'GetBikesByNbrLocation']);
+Route::post('/AddBike', [BikeController::class, 'AddBike']);

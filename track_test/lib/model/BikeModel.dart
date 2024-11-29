@@ -1,20 +1,23 @@
-class BusModel {
+class BikeModel {
   int id;
   String name;
   double latitude;
   double longitude;
+  bool reserved;
 
-  BusModel(
+  BikeModel(
       {required this.id,
       required this.name,
       required this.latitude,
-      required this.longitude});
+      required this.longitude,
+      required this.reserved});
 
-  factory BusModel.fromJson(Map<String, dynamic> json) {
-    return BusModel(
+  factory BikeModel.fromJson(Map<String, dynamic> json) {
+    return BikeModel(
         id: json["id"],
         latitude: json['latitude'],
         longitude: json['longitude'],
+        reserved: json['reserved'],
         name: json['name']);
   }
 
@@ -23,12 +26,13 @@ class BusModel {
       'id': id,
       'latitude': latitude,
       'longitude': longitude,
+      'reserved': reserved,
       'name': name
     };
   }
 
   @override
   String toString() {
-    return 'BusModel{id: $id, longitude: $longitude, latitude: $latitude, name: $name}';
+    return 'BikeModel{id: $id, longitude: $longitude, latitude: $latitude, name: $name ,reserved:$name}';
   }
 }

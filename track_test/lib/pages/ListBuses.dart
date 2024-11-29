@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:track_test/model/BusModel.dart';
+import 'package:track_test/model/BikeModel.dart';
 import 'package:track_test/pages/TrackBuses.dart';
 import 'package:track_test/services/BusServices.dart';
 
@@ -11,12 +11,12 @@ class ListBuses extends StatefulWidget {
 }
 
 class _ListBusesState extends State<ListBuses> {
-  List<BusModel> buses = [];
+  List<BikeModel> buses = [];
   var loading = true;
   final BusService _busService = BusService();
 
   fetchBUses() async {
-    List<BusModel> buses_data = await _busService.getbuses();
+    List<BikeModel> buses_data = await _busService.getBikes();
     setState(() {
       buses = buses_data;
       loading = false;
@@ -35,7 +35,7 @@ class _ListBusesState extends State<ListBuses> {
         appBar: AppBar(
             title: const Center(
                 child: Text(
-              "Buses",
+              "Bikes",
               style:
                   TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             )),
@@ -64,9 +64,9 @@ class _ListBusesState extends State<ListBuses> {
                   : ListView.builder(
                       itemCount: buses.length,
                       itemBuilder: (context, index) {
-                        BusModel _busmodel = buses[index];
+                        BikeModel _BikeModel = buses[index];
                         return Dismissible(
-                          key: Key(_busmodel.id.toString()),
+                          key: Key(_BikeModel.id.toString()),
                           background: Container(
                             color: Colors.cyan,
                             child: const Icon(
@@ -81,7 +81,7 @@ class _ListBusesState extends State<ListBuses> {
                                 return AlertDialog(
                                   title: const Text("Confirm Delete"),
                                   content: Text(
-                                      "Would you like to delete ${_busmodel.name}?"),
+                                      "Would you like to delete ${_BikeModel.name}?"),
                                   actions: [
                                     ElevatedButton(
                                       style: ElevatedButton.styleFrom(
@@ -129,7 +129,7 @@ class _ListBusesState extends State<ListBuses> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (BuildContext context) =>
-                                                TrackBus(bus: _busmodel)));
+                                                TrackBus(bus: _BikeModel)));
                                   },
                                   icon: const Icon(
                                     Icons.check,
@@ -137,7 +137,7 @@ class _ListBusesState extends State<ListBuses> {
                                   ),
                                   label: const Text("Check")),
                               title: Text(
-                                "${_busmodel.name}",
+                                "${_BikeModel.name}",
                                 style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
@@ -145,7 +145,7 @@ class _ListBusesState extends State<ListBuses> {
                                 ),
                               ),
                               subtitle: Text(
-                                _busmodel.id.toString(),
+                                _BikeModel.id.toString(),
                                 style: const TextStyle(
                                   fontSize: 13,
                                   color: Colors.grey,

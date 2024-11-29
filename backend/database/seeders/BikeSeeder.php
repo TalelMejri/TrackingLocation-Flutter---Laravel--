@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Bus;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class BusSeeder extends Seeder
+class BikeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,7 +14,6 @@ class BusSeeder extends Seeder
      */
     public function run()
     {
-        Bus::factory()->count(10)->create();
-
+        //
     }
 }
