@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string("name");
             $table->double("latitude");
             $table->double("longitude");
-            $table->boolean("reserved")->default(false);
+            $table->integer("reserved")->default(0);
             $table->integer("NbrLocation")->default(0);
             $table->timestamps();
         });

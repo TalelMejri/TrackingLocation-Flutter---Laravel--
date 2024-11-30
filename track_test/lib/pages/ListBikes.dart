@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:track_test/model/BikeModel.dart';
-import 'package:track_test/pages/TrackBuses.dart';
-import 'package:track_test/services/BusServices.dart';
+import 'package:track_test/pages/TrackBikes.dart';
+import 'package:track_test/services/BikeServices.dart';
 
 class ListBuses extends StatefulWidget {
   const ListBuses({super.key});

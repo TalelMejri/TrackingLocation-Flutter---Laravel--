@@ -6,7 +6,7 @@ import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:track_test/model/BikeModel.dart';
-import 'package:track_test/services/BusServices.dart';
+import 'package:track_test/services/BikeServices.dart';
 
 class TrackBus extends StatefulWidget {
   const TrackBus({super.key, required this.bus});

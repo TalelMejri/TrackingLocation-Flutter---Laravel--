@@ -9,9 +9,9 @@ class BusService {
       final response = await http.get(Uri.parse("$BASE_URL_BACKEND/getBikes"));
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body)['data'];
-        var buses =
+        var bikes =
             jsonData.map<BikeModel>((json) => BikeModel.fromJson(json)).toList();
-        return buses;
+        return bikes;
       } else {
         return [];
       }
@@ -21,19 +21,19 @@ class BusService {
   }
 
   Future<BikeModel> getBikeById(id) async {
-    var buses;
+    var bikes;
     try {
       final response =
           await http.get(Uri.parse("$BASE_URL_BACKEND/getBikeById/$id"));
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body)['data'];
-        var buses = BikeModel.fromJson(jsonData);
-        return buses;
+        var bikes = BikeModel.fromJson(jsonData);
+        return bikes;
       } else {
-        return buses;
+        return bikes;
       }
     } catch (e) {
-      return buses;
+      return bikes;
     }
   }
 }

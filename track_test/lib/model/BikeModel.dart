@@ -3,7 +3,7 @@ class BikeModel {
   String name;
   double latitude;
   double longitude;
-  bool reserved;
+  int reserved;
 
   BikeModel(
       {required this.id,
@@ -33,6 +33,6 @@ class BikeModel {
 
   @override
   String toString() {
-    return 'BikeModel{id: $id, longitude: $longitude, latitude: $latitude, name: $name ,reserved:$name}';
+    return 'BikeModel{id: $id, longitude: $longitude, latitude: $latitude, name: $name ,reserved:$reserved}';
   }
 }
