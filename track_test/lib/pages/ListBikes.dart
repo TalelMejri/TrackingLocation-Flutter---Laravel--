@@ -130,7 +130,28 @@ class _LisetBikesState extends State<LisetBikes> {
                           bikes.removeAt(index);
                         });
                         ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Delete")));
+                          SnackBar(
+                            content: Text(
+                              " Bike Deleted With Sucess",
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            backgroundColor: Colors.green,
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            action: SnackBarAction(
+                              label: "Close",
+                              textColor: Colors.yellow,
+                              onPressed: () {
+                                print("Undo action clicked!");
+                              },
+                            ),
+                            duration: const Duration(seconds: 3),
+                          ),
+                        );
                       },
                       child: Card(
                         elevation: 4,

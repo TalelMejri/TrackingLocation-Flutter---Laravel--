@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:track_test/model/MenuModel.dart';
+import 'package:track_test/pages/AddBike.dart';
 import 'package:track_test/pages/ListBikes.dart';
 import 'package:track_test/services/BikeServices.dart';
 import 'package:track_test/widgets/buildDashboardCard.dart';
@@ -14,12 +15,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectIndex = 0;
-
-  void changeSelectedIndex(int index) {
-    setState(() {
-      _selectIndex = index;
-    });
-  }
 
   final BikeSrvice _bikeSrvice = BikeSrvice();
   MenuModel menu = new MenuModel(bikesReserved: 0, bikesNotReserved: 0);
@@ -37,6 +32,13 @@ class _HomePageState extends State<HomePage> {
       loading = false;
     });
     print(menu);
+  }
+
+  void changeSelectedIndex(int index) {
+    setState(() {
+      _selectIndex = index;
+    });
+    getMenu();
   }
 
   @override
@@ -122,6 +124,39 @@ class _HomePageState extends State<HomePage> {
                               subtitle: subtitles[index],
                             );
                           },
+                        ),
+                      ),
+                      Center(
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const AddBike()));
+                          },
+                          icon: Icon(
+                            Icons.electric_bike,
+                            size: 30,
+                            color: Colors.white,
+                          ),
+                          label: Text(
+                            "Add New Bike",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.indigo,
+                            onPrimary: Colors.black,
+                            padding: EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 20),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            elevation: 5,
+                          ),
                         ),
                       ),
                     ],

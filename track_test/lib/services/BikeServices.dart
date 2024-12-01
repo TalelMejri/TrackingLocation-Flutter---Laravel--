@@ -5,6 +5,7 @@ import 'package:track_test/model/BikeModel.dart';
 import 'package:track_test/model/MenuModel.dart';
 
 class BikeSrvice {
+  bool correctAnswer = true;
   Future<List<BikeModel>> getBikes() async {
     try {
       final response = await http.get(Uri.parse("$BASE_URL_BACKEND/getBikes"));
@@ -55,8 +56,7 @@ class BikeSrvice {
     }
   }
 
-
-   Future<String> UpdateBikeReserved(int id) async {
+  Future<String> UpdateBikeReserved(int id) async {
     try {
       final response = await http
           .put(Uri.parse('$BASE_URL_BACKEND/UpdateReserved/' + id.toString()));
@@ -67,7 +67,7 @@ class BikeSrvice {
     }
   }
 
-   Future<String> DeleteBike(int id) async {
+  Future<String> DeleteBike(int id) async {
     try {
       final response = await http
           .delete(Uri.parse('$BASE_URL_BACKEND/DeleteBike/' + id.toString()));
@@ -75,6 +75,27 @@ class BikeSrvice {
       return message;
     } catch (e) {
       return e.toString();
+    }
+  }
+
+  Future<bool> AddBike(String id, String name, double lat, double long) async {
+    try {
+      final request = {
+        "id": id,
+        "name": name,
+        "latitude": lat,
+        "longitude": long
+      };
+      final response = await http.post(Uri.parse('$BASE_URL_BACKEND/AddBike'),
+          body: jsonEncode(request),
+          headers: {'Content-Type': 'application/json'});
+      String message = jsonDecode(response.body)['message'];
+      if (message.contains("already exists")) {
+        return false;
+      }
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 }

@@ -73,11 +73,17 @@ class BikeController extends Controller
 
     function AddBike(Request $request)
     {
-        $bike = Bike::create([
-            "name" => $request->name,
-            "latitude" => $request->latitude,
-            "longitude" => $request->longitude
-        ]);
-        return response()->json(["data" => $bike], 201);
+        $bike = Bike::find($request->id);
+        if ($bike) {
+            return response()->json(["message" => "already exists"], 200);
+        } else {
+            Bike::create([
+                "id" => $request->id,
+                "name" => $request->name,
+                "latitude" => $request->latitude,
+                "longitude" => $request->longitude
+            ]);
+            return response()->json(["message" => "Added"], 201);
+        }
     }
 }
