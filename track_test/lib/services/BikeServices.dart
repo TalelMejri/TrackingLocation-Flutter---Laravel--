@@ -2,21 +2,39 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:track_test/global/env.dart';
 import 'package:track_test/model/BikeModel.dart';
+import 'package:track_test/model/MenuModel.dart';
 
-class BusService {
+class BikeSrvice {
   Future<List<BikeModel>> getBikes() async {
     try {
       final response = await http.get(Uri.parse("$BASE_URL_BACKEND/getBikes"));
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body)['data'];
-        var bikes =
-            jsonData.map<BikeModel>((json) => BikeModel.fromJson(json)).toList();
+        var bikes = jsonData
+            .map<BikeModel>((json) => BikeModel.fromJson(json))
+            .toList();
         return bikes;
       } else {
         return [];
       }
     } catch (e) {
       return [];
+    }
+  }
+
+  Future<MenuModel> getMenuBikes() async {
+    var bikes = new MenuModel(bikesReserved: 0, bikesNotReserved: 0);
+    try {
+      final response = await http.get(Uri.parse("$BASE_URL_BACKEND/getBikes"));
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        bikes = MenuModel.fromJson(jsonData);
+        return bikes;
+      } else {
+        return bikes;
+      }
+    } catch (e) {
+      return bikes;
     }
   }
 
@@ -34,6 +52,29 @@ class BusService {
       }
     } catch (e) {
       return bikes;
+    }
+  }
+
+
+   Future<String> UpdateBikeReserved(int id) async {
+    try {
+      final response = await http
+          .put(Uri.parse('$BASE_URL_BACKEND/UpdateReserved/' + id.toString()));
+      String message = jsonDecode(response.body)['Message'];
+      return message;
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+   Future<String> DeleteBike(int id) async {
+    try {
+      final response = await http
+          .delete(Uri.parse('$BASE_URL_BACKEND/DeleteBike/' + id.toString()));
+      String message = jsonDecode(response.body)['Message'];
+      return message;
+    } catch (e) {
+      return e.toString();
     }
   }
 }

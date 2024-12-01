@@ -41,7 +41,6 @@ class BikeController extends Controller
             $bus->latitude = $request->latitude;
             $bus->longitude = $request->longitude;
             $bus->save();
-            //broadcast(new TrackingLocation("tracking"));
             return response()->json(['data' => "Update Success"], 201);
         } else {
             return response()->json(['data' => "Not Found"], 404);
@@ -52,6 +51,7 @@ class BikeController extends Controller
     {
         $bike = Bike::find($id);
         if ($bike) {
+            $bike->delete();
             return response()->json(['Message' => "Bike Deleted"], 200);
         } else {
             return response()->json(["Message" => "Not Found"], 404);
@@ -65,7 +65,7 @@ class BikeController extends Controller
             $bike->reserved = !$bike->reserved;
             $bike->NbrLocation = $bike->NbrLocation + 1;
             $bike->save();
-            return response()->json(['Message' => "Bike Deleted"], 200);
+            return response()->json(['Message' => "Bike Updated Reserved"], 200);
         } else {
             return response()->json(["Message" => "Not Found"], 404);
         }

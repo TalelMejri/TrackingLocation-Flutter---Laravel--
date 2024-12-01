@@ -8,15 +8,15 @@ import 'dart:convert';
 import 'package:track_test/model/BikeModel.dart';
 import 'package:track_test/services/BikeServices.dart';
 
-class TrackBus extends StatefulWidget {
-  const TrackBus({super.key, required this.bus});
-  final BikeModel bus;
+class TrackBike extends StatefulWidget {
+  const TrackBike({super.key, required this.bike});
+  final BikeModel bike;
 
   @override
-  _TrackBusState createState() => _TrackBusState();
+  _TrackBikeState createState() => _TrackBikeState();
 }
 
-class _TrackBusState extends State<TrackBus> {
+class _TrackBikeState extends State<TrackBike> {
   double? totalDistance;
   double? totalDuration;
   final MapController mapController = MapController();
@@ -24,28 +24,59 @@ class _TrackBusState extends State<TrackBus> {
   List<LatLng> routePoints = [];
   List<Marker> markers = [];
   double _currentZoom = 13.0;
+  double maxDistance = 2.0;
   Timer? _markerUpdateTimer;
   double lat = 0.0;
   double long = 0.0;
 
   final String orsApiKey =
       '5b3ce3597851110001cf6248ed49d5d5d50b47c886fa2a8261919d5d';
-  final BusService _busService = BusService();
+  final BikeSrvice _bikeService = BikeSrvice();
 
   void _startMarkerUpdateTimer() {
+    final Distance distance = Distance();
     _markerUpdateTimer =
         Timer.periodic(const Duration(seconds: 3), (timer) async {
-      final busmodel = await _busService.getBikeById(widget.bus.id);
-      if (busmodel != null) {
+      final bikemodel = await _bikeService.getBikeById(widget.bike.id);
+      if (bikemodel != null) {
         setState(() {
-          widget.bus.longitude = busmodel.longitude;
-          widget.bus.latitude = busmodel.latitude;
+          widget.bike.longitude = bikemodel.longitude;
+          widget.bike.latitude = bikemodel.latitude;
+          if (currentLocation != null) {
+            double calculatedDistance = distance.as(
+              LengthUnit.Kilometer,
+              LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+              LatLng(widget.bike.latitude, widget.bike.longitude),
+            );
+            if (calculatedDistance > maxDistance) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    "Alert: The bike is ${calculatedDistance.toStringAsFixed(2)} km away from your current location.",
+                    style: const TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                  backgroundColor: Colors.red,
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  action: SnackBarAction(
+                    label: "Close",
+                    textColor: Colors.yellow,
+                    onPressed: () {
+                      print("Undo action clicked!");
+                    },
+                  ),
+                  duration: const Duration(seconds: 3),
+                ),
+              );
+            }
+          }
         });
       }
     });
   }
-
-  //late PusherConfig _pusherConfig = PusherConfig();
 
   void _updateRedMarkerPosition() {
     if (currentLocation != null) {
@@ -71,22 +102,12 @@ class _TrackBusState extends State<TrackBus> {
   @override
   void initState() {
     super.initState();
-    // _pusherConfig.initPusher(
-    //   (p0) {
-    //     print("test");
-    //   },
-    // );
     setState(() {
-      long = widget.bus.longitude;
-      lat = widget.bus.latitude;
+      long = widget.bike.longitude;
+      lat = widget.bike.latitude;
     });
     _getCurrentLocation();
     _startMarkerUpdateTimer();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   Future<void> _getCurrentLocation() async {
@@ -164,7 +185,7 @@ class _TrackBusState extends State<TrackBus> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bike Tracking'),
+        title: Text('Bike Tracking Id :' + widget.bike.id.toString()),
       ),
       body: currentLocation == null
           ? const Center(child: CircularProgressIndicator())
